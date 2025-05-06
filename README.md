@@ -16,4 +16,3 @@
 - AWS (DynamoDB, SNS, EC2, IAM)
 - HTML + SimpleCSS
 
-## 🛠️ Setup Instructions

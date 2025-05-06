@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard | SportSphere</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      padding: 1rem;
+      position: relative;
+    }
+
+    .logout-link {
+      position: absolute;
+      top: 3rem;
+      right: 2rem;
+      text-decoration: underline;
+      color: rgb(26, 41, 158);
+      font-weight: normal;
+      font-size: 1rem;
+    }
+
+    .nav-container {
+      margin: 1rem 0;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .nav a {
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      background-color: #007BFF;
+      color: white;
+      border-radius: 10px;
+    }
+
+    .nav a:hover {
+      background-color: #0056b3;
+    }
+
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      padding: 2rem;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 1rem 2rem;
+      min-width: 250px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+
+    .card h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #f0f0f0;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="SportSphere Logo" class="logo">
+    <h1>Dashboard - Admin</h1>
+    <p>Welcome, {{ session['name']|capitalize }}!</p>
+  </header>
+
+  <main>
+    <div class="nav-container">
+      <div class="nav">
+        <a href="{{ url_for('manage_events') }}">📁 Manage Events</a>
+        <a href="{{ url_for('manage_users') }}">👥 Manage Users</a>
+        <a href="{{ url_for('admin_stats') }}">📊 Platform Stats</a>
+      </div>
+    </div>
+
+    <h2 style="text-align:center;">Admin Overview</h2>
+    <div class="card-container">
+      <div class="card">
+        <h3>Total Events</h3>
+        <p>{{ stats.total_events }}</p>
+      </div>
+      <div class="card">
+        <h3>Total Users</h3>
+        <p>{{ stats.total_users }}</p>
+      </div>
+      <div class="card">
+        <h3>Tickets Sold</h3>
+        <p>{{ stats.tickets_sold }}</p>
+      </div>
+      <div class="card">
+        <h3>Total Revenue</h3>
+        <p>₹{{ stats.total_revenue }}</p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 SportSphere</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <meta charset="UTF-8">
+  <title>Manage Events | SportSphere Admin</title>
+
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="SportSphere Logo" class="logo">
+    <h1>Admin: Manage Events</h1>
+    <a href="{{ url_for('dashboard') }}">← Dashboard</a> |
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </header>
+
+  <main>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    {% if events %}
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Organizer</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Price</th>
+            <th>Total Tickets</th> <!-- Added Total Tickets column -->
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for event in events %}
+            <tr>
+              <td>{{ event['title'] }}</td>
+              <td>{{ event['organizer_email'] }}</td>
+              <td>{{ event['description'] }}</td>
+              <td>{{ event['date'] }}</td>
+              <td>{{ event['ticket_cost'] }}</td>
+              <td>{{ event['total_tickets'] }}</td> <!-- Displaying the total number of tickets -->
+              <td>
+                <!-- Edit Button (Styled like Delete) -->
+                <form method="get" action="{{ url_for('edit_event', event_id=event['event_id']) }}" style="display:inline;">
+                  <button type="submit">Edit</button>
+                </form>
+
+                <!-- Delete Button -->
+                <form method="post" action="{{ url_for('delete_event', event_id=event['event_id']) }}" style="display:inline;">
+                  <button type="submit" onclick="return confirm('Delete this event?')">Delete</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No events found.</p>
+    {% endif %}
+  </main>
+
+  <footer>
+    <p>&copy; 2025 SportSphere</p>
+  </footer>
+</body>
+</html>

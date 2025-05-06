@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <meta charset="UTF-8">
+  <title>Page Not Found | SportSphere</title>
+  
+  <style>
+    h1 {
+      font-size: 3rem;
+    }
+  </style>
+</head>
+<body>
+  <main style="text-align: center;">
+    <h1>404</h1>
+    <p>Oops! The page you’re looking for doesn’t exist.</p>
+    <a href="{{ url_for('index') }}" class="button">Back to Home</a>
+  </main>
+</body>
+</html>

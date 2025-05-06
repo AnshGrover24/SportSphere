@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <meta charset="UTF-8">
+  <title>SportSphere | Home</title>
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="SportSphere Logo" class="logo">
+    <h1>Welcome to SportSphere</h1>
+    <p>A cloud-based platform for managing and booking sports events.</p>
+  </header>
+
+  <main>
+    <p>Choose an option below to get started:</p>
+    <div class="button-group">
+      <a href="{{ url_for('login') }}" class="button">Login</a>
+      <a href="{{ url_for('register') }}" class="button">Register</a>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 SportSphere</p>
+  </footer>
+</body>
+</html>

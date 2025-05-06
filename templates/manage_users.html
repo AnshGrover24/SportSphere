@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <meta charset="UTF-8">
+  <title>Manage Users | SportSphere Admin</title>
+  
+</head>
+<body>
+  <header>
+    <h1>Admin: Manage Users</h1>
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="SportSphere Logo" class="logo">
+    <a href="{{ url_for('dashboard') }}">← Dashboard</a> |
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </header>
+
+  <main>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    {% if users %}
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+            <tr>
+              <td>{{ user['name'] }}</td>
+              <td>{{ user['email'] }}</td>
+              <td>{{ user['role'] }}</td>
+              <td>
+                <form method="post" action="{{ url_for('delete_user', user_id=user['user_id']) }}" style="display:inline;">
+                  <button type="submit" onclick="return confirm('Delete this user?')">Delete</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No users found.</p>
+    {% endif %}
+  </main>
+
+  <footer>
+    <p>&copy; 2025 SportSphere</p>
+  </footer>
+</body>
+</html>

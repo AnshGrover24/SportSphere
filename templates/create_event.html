@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <title>Create Event | SportSphere</title>
+</head>
+<body>
+  <header>
+    <h1>Create a New Event</h1>
+    <p>Organizer: {{ session['email'] }}</p>
+    <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a> |
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </header>
+
+  <main>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="post">
+      <label>Event Title:
+        <input type="text" name="title" required>
+      </label>
+
+      <label>Description:
+        <textarea name="description" rows="4" required></textarea>
+      </label>
+
+      <label>Date of Event:
+        <input type="date" name="date" required>
+      </label>
+
+      <label>Total Tickets:
+        <input type="number" name="total_tickets" min="1" required>
+      </label>
+
+      <label>Ticket Cost (in ₹):
+        <input type="number" name="ticket_cost" min="0" step="0.01" required>
+      </label>
+
+      <button type="submit">Create Event</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 SportSphere</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <meta charset="UTF-8">
+  <title>Ticket Confirmed | SportSphere</title>
+  
+</head>
+<body>
+  <header>
+    <h1>🎟️ Ticket Confirmed!</h1>
+  </header>
+
+  <main>
+    <p>Your ticket for <strong>{{ event_title }}</strong> has been successfully booked.</p>
+    <p>A confirmation has been sent to your email via email notification.</p>
+    <a href="{{ url_for('dashboard') }}" class="button">Back to Dashboard</a>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 SportSphere</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <title>Dashboard | SportSphere</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      position: relative;
+      padding: 1rem;
+    }
+
+    .logout-link {
+      position: absolute;
+      top: 3rem;
+      right: 2rem;
+      text-decoration: underline;
+      color: rgb(26, 41, 158);
+      font-weight: normal;
+      font-size: 1rem;
+    }
+
+    .nav-container {
+      margin: 1rem 0;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .nav a {
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      background-color: #007BFF;
+      color: white;
+      border-radius: 10px;
+    }
+
+    .nav a:hover {
+      background-color: #0056b3;
+    }
+
+    .event-section {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .scroll-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.2);
+      color: white;
+      border: none;
+      font-size: 1rem;
+      padding: 0.3rem 0.6rem;
+      cursor: pointer;
+      z-index: 2;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .scroll-btn:hover {
+      background: rgba(0, 0, 0, 0.35);
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    .scroll-left {
+      left: 0.5rem;
+    }
+
+    .scroll-right {
+      right: 0.5rem;
+    }
+
+    .event-scroll {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-behavior: smooth;
+      scroll-snap-type: x mandatory;
+      padding: 1rem 2rem;
+    }
+
+    .event-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .event {
+      min-width: 265px;
+      height: 300px;
+      flex: 0 0 auto;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      scroll-snap-align: start;
+    }
+
+    .event h3 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    .event p {
+      text-align: left;  
+    }
+
+    button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      background-color: #28a745;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #f0f0f0;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="SportSphere Logo" class="logo">
+    <h1>Dashboard - {{ session['role']|capitalize }}</h1>
+    <p>Welcome, {{ session['name']|capitalize }}!</p>
+  </header>
+
+  <main>
+    <div class="nav-container">
+      <div class="nav">
+        {% if session['role'] == 'organizer' %}
+          <a href="{{ url_for('create_event') }}">➕ Create Event</a>
+          <a href="{{ url_for('organizer_stats') }}">📊 Stats</a>
+          <a href="{{ url_for('organizer_account') }}">👤 My Account</a>
+        {% elif session['role'] == 'admin' %}
+          <a href="{{ url_for('manage_events') }}">📁 Manage Events</a>
+          <a href="{{ url_for('manage_users') }}">👥 Manage Users</a>
+        {% elif session['role'] == 'attendee' %}
+        <a href="{{ url_for('attendee_bookings') }}">📅 Bookings</a>
+
+          <a href="{{ url_for('attendee_account') }}">👤 My Account</a>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if session['role'] == 'attendee' %}
+      <h2>Available Events</h2>
+      <div class="event-section">
+        <button class="scroll-btn scroll-left" onclick="scrollEvents('left')">←</button>
+        <div class="event-scroll" id="eventScroll">
+          {% for event in events %}
+            <div class="event">
+              <h3>{{ event.title }}</h3>
+              <p><strong>Date:</strong> {{ event.date }}</p>
+              <p>{{ event.description }}</p>
+              <p><strong>Tickets Left:</strong> {{ event.available_tickets }}</p>
+              <p><strong>Price:</strong> ₹{{ event.ticket_cost }}</p>
+              {% if event.available_tickets|int > 0 %}
+                <form action="{{ url_for('book', event_id=event.event_id) }}" method="get">
+                  <button type="submit">🎟️ Book Ticket</button>
+                </form>
+              {% else %}
+                <p style="color:red;"><strong>Sold Out</strong></p>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+        <button class="scroll-btn scroll-right" onclick="scrollEvents('right')">→</button>
+      </div>
+
+    {% elif session['role'] == 'organizer' %}
+      <h2>Your Events</h2>
+      {% if events %}
+        <div class="event-section">
+          <button class="scroll-btn scroll-left" onclick="scrollEvents('left')">←</button>
+          <div class="event-scroll" id="eventScroll">
+            {% for event in events %}
+              <div class="event">
+                <h3>{{ event.title }}</h3>
+                <p><strong>Date:</strong> {{ event.date }}</p>
+                <p>{{ event.description }}</p>
+                <p><strong>Sold:</strong> {{ event.total_tickets|int - event.available_tickets|int }} / {{ event.total_tickets }}</p>
+                <p><strong>Revenue:</strong> ₹{{ (event.total_tickets|int - event.available_tickets|int) * event.ticket_cost|float }}</p>
+              </div>
+            {% endfor %}
+          </div>
+          <button class="scroll-btn scroll-right" onclick="scrollEvents('right')">→</button>
+        </div>
+      {% else %}
+        <p>No events created yet.</p>
+      {% endif %}
+
+    {% elif session['role'] == 'admin' %}
+      <h2>Admin Panel</h2>
+      <p>Use the menu above to manage events and users.</p>
+    {% endif %}
+  </main>
+
+  <footer>
+    <p>&copy; 2025 SportSphere</p>
+  </footer>
+
+  <script>
+    function scrollEvents(direction) {
+      const scrollContainer = document.getElementById('eventScroll');
+      const scrollAmount = 320;
+      scrollContainer.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+
+    setInterval(() => {
+      const container = document.getElementById('eventScroll');
+      const maxScrollLeft = container.scrollWidth - container.clientWidth;
+      if (Math.ceil(container.scrollLeft) >= maxScrollLeft) {
+        container.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        container.scrollBy({ left: 320, behavior: 'smooth' });
+      }
+    }, 5000);
+  </script>
+</body>
+</html>

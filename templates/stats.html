@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stats | SportSphere</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background-color: #f9f9f9;
+      position: relative; /* Allow absolute positioning within the body */
+    }
+
+    h1, h3 {
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+      margin-top: 50px; /* Added margin to shift the table down */
+      margin-bottom: 2rem;
+    }
+
+    th, td {
+      text-align: center;
+      padding: 12px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    th {
+      background-color: #007BFF;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    a {
+      display: inline-block;
+      text-decoration: none;
+      color: #007BFF;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .totals {
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+      gap: 5rem;
+    }
+
+    .totals div {
+      font-size: 1.2rem;
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .search-container {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      text-align: center;
+      z-index: 10; /* Ensure it is above the table */
+    }
+
+    .search-box {
+      padding: 8px;
+      font-size: 1rem;
+      width: 250px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Event Statistics</h1>
+
+  <!-- Search Box -->
+  <div class="search-container">
+    <form method="GET" action="{{ url_for('organizer_stats') }}">
+      <input type="text" name="search" class="search-box" placeholder="Search" value="{{ request.args.get('search', '') }}">
+    </form>
+  </div>
+
+  <table>
+    <tr>
+      <th>Title</th>
+      <th>Date</th>
+      <th>Price (₹)</th>
+      <th>Total Tickets</th>
+      <th>Tickets Sold</th>
+      <th>Revenue (₹)</th>
+    </tr>
+    {% for s in stats %}
+      <tr>
+        <td>{{ s.title }}</td>
+        <td>{{ s.date }}</td>
+        <td>{{ s.ticket_price }}</td>
+        <td>{{ s.total }}</td>
+        <td>{{ s.sold }}</td>
+        <td>{{ s.revenue }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+
+  <div class="totals">
+    <div>Total Tickets Sold: {{ total_tickets_sold }}</div>
+    <div>Total Revenue: ₹{{ total_revenue }}</div>
+  </div>
+
+  <div class="back-link">
+    <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+  </div>
+</body>
+</html>

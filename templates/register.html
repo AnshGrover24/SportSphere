@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <title>Register | SportSphere</title>
+
+  <style>
+    .short-input {
+      width: 250px;
+      height: 35px;
+      box-sizing: border-box;
+      font-size: 16px;
+      padding: 5px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+    }
+
+    form label {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Register for SportSphere</h1>
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="SportSphere Logo" class="logo">
+  </header>
+
+  <main>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="post">
+      <label>Name:
+        <input type="text" name="name" required class="short-input">
+      </label>
+
+      <label>Email:
+        <input type="email" name="email" required class="short-input">
+      </label>
+
+      <label>Role:
+        <select name="role" required class="short-input">
+          <option value="attendee">Attendee</option>
+          <option value="organizer">Organizer</option>
+        </select>
+      </label>
+
+      <label>Password:
+        <input type="password" name="password" required class="short-input">
+      </label>
+
+      <button type="submit">Register</button>
+    </form>
+
+    <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a>.</p>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 SportSphere</p>
+  </footer>
+</body>
+</html>

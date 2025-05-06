@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <title>Edit Event | SportSphere Admin</title>
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="SportSphere Logo" class="logo">
+    <h1>Admin: Edit Event</h1>
+    <a href="{{ url_for('manage_events') }}">← Back to Manage Events</a> |
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </header>
+
+  <main>
+    <h2>Edit Event: {{ event['title'] }}</h2>
+    <form method="POST">
+      <label for="title">Title:</label>
+      <input type="text" name="title" value="{{ event['title'] }}" required><br>
+
+      <label for="description">Description:</label>
+      <textarea name="description">{{ event['description'] }}</textarea><br>
+
+      <label for="date">Date:</label>
+      <input type="date" name="date" value="{{ event['date'] }}" required><br>
+
+      <label for="organizer_email">Organizer:</label>
+      <input type="email" name="organizer_email" value="{{ event['organizer_email'] }}" required><br>
+
+      <label for="ticket_cost">Price:</label>
+      <input type="number" step="0.01" name="ticket_cost" value="{{ event['ticket_cost'] }}" required><br>
+
+      <label for="total_tickets">Total No. of Tickets:</label>
+      <input type="number" name="total_tickets" value="{{ event['total_tickets'] }}" required><br>
+
+      <button type="submit" class="btn btn-success">Save Changes</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 SportSphere</p>
+  </footer>
+</body>
+</html>
